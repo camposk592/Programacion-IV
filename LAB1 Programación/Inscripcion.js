@@ -13,9 +13,13 @@ var app = new Vue({
             idCliente: '',
             codigo: '',
             nombre: '',
-            direccion: '',
-            telefono: '',
-            dui: ''
+            materia: '',
+            materia_2: '',
+            materia_3: '',
+            materia_4: '',
+            materia_5: '',
+            fecha_i: '',
+            
         },
     },
     methods: {
@@ -31,31 +35,25 @@ var app = new Vue({
             let sql = '',
                 parametros = [];
             if(this.cliente.accion == 'nuevo'){
-                sql = 'INSERT INTO clientes (codigo, nombre, direccion, telefono, dui) VALUES (?,?,?,?,?)';
-                parametros = [this.cliente.codigo,this.cliente.nombre,this.cliente.direccion,this.cliente.telefono,this.cliente.dui];
+                sql = 'INSERT INTO inscripcion (codigo, nombre, materia, materia_2,materia_3,materia_4,materia_5, fecha_i) VALUES (?,?,?,?,?,?,?,?)';
+                parametros = [this.cliente.codigo,this.cliente.nombre,this.cliente.materia,this.cliente.materia_2,this.cliente.materia_3,this.cliente.materia_4,this.cliente.materia_5,this.cliente.fecha_i];
             }else if(this.cliente.accion == 'modificar'){
-                sql = 'UPDATE clientes SET codigo=?, nombre=?, direccion=?, telefono=?, dui=? WHERE idCliente=?';
-                parametros = [this.cliente.codigo,this.cliente.nombre,this.cliente.direccion,this.cliente.telefono,this.cliente.dui,this.cliente.idCliente];
+                sql = 'UPDATE inscripcion SET codigo=?, nombre=?, materia=?, materia_2=?, materia_3=?, materia_4=?,materia_5=?,fecha_i=?,  WHERE idCliente=?';
+                parametros = [this.cliente.codigo,this.cliente.nombre,this.cliente.materia,this.cliente.materia_2,this.cliente.materia_3,this.cliente.materia_4,this.cliente.materia_5,this.cliente.fecha_i,this.cliente.idCliente];
             }else if(this.cliente.accion == 'eliminar'){
-                sql = 'DELETE FROM clientes WHERE idCliente=?';
+                sql = 'DELETE FROM inscripcion WHERE idCliente=?';
                 parametros = [this.cliente.idCliente];
             }
             db_sistema.transaction(tx=>{
                 tx.executeSql(sql,
                     parametros,
                 (tx, results)=>{
-                    this.cliente.msg = 'Cliente procesado con exito';
+                    this.cliente.msg = 'Inscripcion con exito';
                     this.nuevoCliente();
                     this.obtenerClientes();
                 },
                 (tx, error)=>{
-                    switch(error.code){
-                        case 6:
-                            this.cliente.msg = 'El codigo o el DUI ya existe, por favor digite otro';
-                            break;
-                            
-                        default:
-                            this.cliente.msg = `Error al procesar el cliente: ${error.message}`;}
+                    this.cliente.msg = `Error ${error.message}`;
                 });
             });
         },
@@ -64,7 +62,7 @@ var app = new Vue({
             this.cliente.accion = 'modificar';
         },
         eliminarCliente(cliente){
-            if( confirm(`¿Esta seguro de eliminar el cliente ${cliente.nombre}?`) ){
+            if( confirm(`¿Esta seguro de eliminar ${cliente.nombre}?`) ){
                 this.cliente.idCliente = cliente.idCliente;
                 this.cliente.accion = 'eliminar';
                 this.guardarCliente();
@@ -72,7 +70,7 @@ var app = new Vue({
         },
         obtenerClientes(busqueda=''){
             db_sistema.transaction(tx=>{
-                tx.executeSql(`SELECT * FROM clientes WHERE nombre like "%${busqueda}%" OR codigo like "%${busqueda}%"`, [], (tx, results)=>{
+                tx.executeSql(`SELECT * FROM inscripcion WHERE nombre like "%${busqueda}%" OR codigo like "%${busqueda}%"`, [], (tx, results)=>{
                     this.clientes = results.rows;
                     /*this.clientes = [];
                     for(let i=0; i<results.rows.length; i++){
@@ -86,18 +84,26 @@ var app = new Vue({
             this.cliente.idCliente = '';
             this.cliente.codigo = '';
             this.cliente.nombre = '';
-            this.cliente.direccion = '';
-            this.cliente.telefono = '';
-            this.cliente.dui = '';
+            this.cliente.materia = '';
+            this.cliente.materia_2 = '';
+            this.cliente.materia_3 = '';
+            this.cliente.materia_4 = '';
+            this.cliente.materia_5 = '';
+            this.cliente.fecha_i = '';
+           
         }
     },
     created(){
         db_sistema.transaction(tx=>{
-            tx.executeSql('CREATE TABLE IF NOT EXISTS clientes(idCliente INTEGER PRIMARY KEY AUTOINCREMENT, '+
-                'codigo char(10) UNIQUE, nombre char(75), direccion TEXT, telefono char(10), dui char(10) UNIQUE)');
+            tx.executeSql('CREATE TABLE IF NOT EXISTS inscripcion(idCliente INTEGER PRIMARY KEY AUTOINCREMENT, '+
+                'codigo char(10), nombre char(75), materia TEXT, materia_2 TEXT, materia_3 TEXT ,materia_4 TEXT,materia_5 TEXT,fecha_i char(10))');
         }, err=>{
             console.log('Error al crear la tabla de clientes', err);
         });
+        
         this.obtenerClientes();
-    }
+    },
+
+
+   
 });
