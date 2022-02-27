@@ -6,10 +6,10 @@ var appSistema = new Vue({
     el: '#appSistema',
     data: {
         forms:{
-            'cliente':{mostrar:false},
-            'producto':{mostrar:false},
-            'proveedor':{mostrar:false},
-            'categoria':{mostrar:false}
+            'alumno':{mostrar:false},
+            'matricula':{mostrar:false},
+            'inscripcion':{mostrar:false},
+            'materia':{mostrar:false}
         }
     },
 });
