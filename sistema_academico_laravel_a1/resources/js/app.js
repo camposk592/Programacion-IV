@@ -7,7 +7,11 @@
 require('./bootstrap');
 
 window.Vue = require('vue').default;
-
+window.db = '',
+window.generarIdUnicoFecha = ()=>{
+    let fecha = new Date();
+    return Math.floor(fecha.getTime()/1000).toString(16);
+}
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -42,6 +46,41 @@ const app = new Vue({
     methods:{
         abrirForm(form){
             this.forms[form].mostrar = !this.forms[form].mostrar;
-        }
+            this.$refs[form].obtenerDatos();
+        },
+        abrirBd(){
+            /**
+             * Mecanismos de Almacenamiento
+             * 1. WebSQL
+             * 2. localStorage
+             * 3. IndexedDB
+             */
+            let indexDb = indexedDB.open('db_sistema', 1);
+            indexDb.onupgradeneeded = e=>{
+                let db = e.target.result;
+                tblalumno = db.createObjectStore('alumno', {keyPath:'idAlumno'});
+                tblmateria = db.createObjectStore('materia', {keyPath:'idMateria'});
+                tbldocente = db.createObjectStore('docente', {keyPath:'idDocente'});
+                tblmatricula = db.createObjectStore('matricula', {keyPath:'idMatricula'});
+
+                tblalumno.createIndex('idAlumno', 'idAlumno', {unique:true});
+                tblalumno.createIndex('codigo', 'codigo', {unique:false});
+
+                tblmateria.createIndex('idMateria', 'idMateria', {unique:true});
+                tblmateria.createIndex('codigo', 'codigo', {unique:false});
+
+                tblmatricula.createIndex('idMatricula', 'idMatricula', {unique:true});
+                tblmatricula.createIndex('idAlumno', 'idAlumno', {unique:false});
+            };
+            indexDb.onsuccess = e=>{
+                db = e.target.result;
+            };
+            indexDb.onerror = e=>{
+                console.log(e.target.error);
+            };
+        },
+    },
+    created(){
+        this.abrirBd();
     }
 });
