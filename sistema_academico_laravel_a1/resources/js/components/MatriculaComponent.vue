@@ -1,5 +1,5 @@
 <template>
-        <div id="appCiente">
+        <div id="appMatricula">
             <div class="card text-white" id="carMatricula">
                 <div class="card-header bg-primary">
                     Registro de Matriculas

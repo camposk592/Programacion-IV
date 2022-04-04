@@ -27,6 +27,8 @@ Vue.component('alumno-component', require('./components/AlumnoComponent.vue').de
 Vue.component('docente-component', require('./components/DocenteComponent.vue').default);
 Vue.component('materia-component', require('./components/MateriaComponent.vue').default);
 Vue.component('matricula-component', require('./components/MatriculaComponent.vue').default);
+Vue.component('notas-component', require('./components/NotasComponent.vue').default);
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -43,7 +45,7 @@ const app = new Vue({
             docente:{mostrar:false},
             nota:{mostrar:false},
             matricula:{mostrar:false},
-            isncripcion:{mostrar:false},
+            anotar:{mostrar:false},
         }
     },
     methods:{

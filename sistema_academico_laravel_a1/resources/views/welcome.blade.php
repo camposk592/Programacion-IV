@@ -19,7 +19,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">::.. SISTENA ACADEMICO -- UGB ..::</a>
+                <a class="navbar-brand" href="#">::.. SISTEMA ACADEMICO -- UGB ..::</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -55,6 +55,7 @@
         <docente-component v-bind:form="forms" ref="docente" v-show="forms['docente'].mostrar"></docente-component>
         <materia-component v-bind:form="forms" ref="materia" v-show="forms['materia'].mostrar"></materia-component>
         <matricula-component v-bind:form="forms" ref="matricula" v-show="forms['matricula'].mostrar"></matricula-component>
+        <notas-component v-bind:form="forms" ref="nota" v-show="forms['nota'].mostrar"></notas-component>
     </div>
     <script src="{{ asset('js/app.js') }}"></script>
 </body>
